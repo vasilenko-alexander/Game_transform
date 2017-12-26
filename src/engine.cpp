@@ -192,26 +192,17 @@ namespace ge
     uint Engine::parse_wnd_options(std::string init_options)
     {
         uint flags = 0;
-        try
+        char delim = ' ';
+        std::istringstream strStream(init_options);
+        std::string option;
+        while (std::getline(strStream, option, delim))
         {
-
-            char delim = ' ';
-            std::istringstream strStream(init_options);
-            std::string option;
-            while (std::getline(strStream, option, delim))
-            {
-                std::transform(
-                    option.begin(), option.end(), option.begin(), ::tolower);
-                flags |= defined_options.at(option);
-            }
-
-            return flags;
+            std::transform(
+                option.begin(), option.end(), option.begin(), ::tolower);
+            flags |= defined_options.at(option);
         }
-        catch (const std::out_of_range& ex)
-        {
-            std::cerr << "Some err is occurred: " << ex.what() << std::endl;
-            return flags;
-        }
+
+        return flags;
     }
 
     void Engine::swap_buffers()
@@ -236,7 +227,18 @@ namespace ge
         }
 
         std::stringstream errMsg;
-        uint wndFlags      = parse_wnd_options(init_options);
+        uint wndFlags = 0;
+        try
+        {
+            wndFlags = parse_wnd_options(init_options);
+        }
+        catch (const std::out_of_range& ex)
+        {
+            errMsg << "Window options can't be found: " << ex.what()
+                   << std::endl;
+            return errMsg.str();
+        }
+
         const int init_res = SDL_Init(wndFlags);
 
         if (init_res != 0)
@@ -305,6 +307,12 @@ namespace ge
         shader_program.init_program(vertex_shader_path, frag_shader_path);
 
         shader_program.use();
+
+        glEnable(GL_BLEND);
+        GE_GL_CHECK();
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        GE_GL_CHECK();
 
         fill_background();
 
@@ -432,7 +440,7 @@ namespace ge
 
     void Engine::fill_background()
     {
-        glClearColor(0.22f, 0.22f, 0.22f, 0.f);
+        glClearColor(0.f, 0.f, 0.f, 0.f);
         GE_GL_CHECK();
         glClear(GL_COLOR_BUFFER_BIT);
         GE_GL_CHECK();

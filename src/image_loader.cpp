@@ -16,7 +16,7 @@ namespace ge
 
         if (!file.is_open())
         {
-            cerr << "File " << path << "can't be opened" << endl;
+            cerr << "File " << path << " can't be opened" << endl;
             return buffer;
         }
 

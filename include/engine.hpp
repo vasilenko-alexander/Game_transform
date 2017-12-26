@@ -33,4 +33,5 @@ namespace ge
     std::istream& GE_DECLSPEC operator>>(std::istream& is, texture& tx);
     vec3 GE_DECLSPEC operator*(const vec3& in, const matrix3& transform);
     vertex GE_DECLSPEC operator*(const vertex& in, const matrix3& transform);
+    matrix3 GE_DECLSPEC operator*(const matrix3& mat1, const matrix3& mat2);
 }

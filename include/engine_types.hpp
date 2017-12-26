@@ -29,6 +29,12 @@ namespace ge
         shutdown
     };
 
+    enum class rotate_direction
+    {
+        clockwise,
+        counterclockwise
+    };
+
     struct event
     {
         std::string msg;
@@ -76,8 +82,11 @@ namespace ge
 
         static matrix3 indentity();
         static matrix3 scale(float scale);
-        static matrix3 rotation(float thetha);
-        static matrix3 transport(float delta);
+        static matrix3
+        rotation(float thetha,
+                 rotate_direction direct = rotate_direction::clockwise);
+        static matrix3 transport(float dx, float dy);
+        void operator=(const matrix3& mat);
 
         std::vector<vec3> data = { vec3(), vec3(), vec3() };
     };

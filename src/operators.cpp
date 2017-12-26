@@ -31,6 +31,26 @@ namespace ge
         return out;
     }
 
+    matrix3 operator*(const matrix3& mat1, const matrix3& mat2)
+    {
+        matrix3 res;
+        for (size_t v_i = 0, max_i = 3; v_i < max_i; ++v_i)
+        {
+            res.data[v_i].x = mat1.data[v_i].x * mat2.data[0].x +
+                              mat1.data[v_i].y * mat2.data[1].x +
+                              mat1.data[v_i].w * mat2.data[2].x;
+
+            res.data[v_i].y = mat1.data[v_i].x * mat2.data[0].y +
+                              mat1.data[v_i].y * mat2.data[1].y +
+                              mat1.data[v_i].w * mat2.data[2].y;
+
+            res.data[v_i].w = mat1.data[v_i].x * mat2.data[0].w +
+                              mat1.data[v_i].y * mat2.data[1].w +
+                              mat1.data[v_i].w * mat2.data[2].w;
+        }
+        return res;
+    }
+
     std::istream& operator>>(std::istream& is, texture& tx)
     {
         for (size_t i = 0; i < tx.tex_coords.size(); ++i)
